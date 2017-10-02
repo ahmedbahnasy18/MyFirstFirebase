@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseAuth
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +17,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+        
+        FirebaseApp.configure()
+        
+//        do {
+//            try Auth.auth().signOut()
+//        } catch {
+//            print(error)
+//        }
+//        if let user = Auth.auth().currentUser {
+//            print("USER LOGGED !!! \(user.email!)")
+//            
+//            print(user.displayName)
+//            print(user.photoURL)
+//            print(user.uid)
+//            print(user.providerID)
+            
+//            let sb = UIStoryboard(name: "Main", bundle: nil)
+//            let vc = sb.instantiateViewController(withIdentifier: "MainVC")
+//            let navC = UINavigationController(rootViewController: vc)
+//            window?.rootViewController = navC
+//        }
+        Auth.auth().addStateDidChangeListener { (auth: Auth, user: User?) in
+            if let user = user {
+                //USER LOGGED IN
+                print("USER LOGGED !!! \(user.email!)")
+                let sb = UIStoryboard(name: "Main", bundle: nil)
+                let vc = sb.instantiateViewController(withIdentifier: "MainVC")
+                let navC = UINavigationController(rootViewController: vc)
+                self.window?.rootViewController = navC
+
+            } else {
+                //USER LOGGED OUT
+                print("USER LOGGED OUT")
+                let sb = UIStoryboard(name: "Main", bundle: nil)
+                let vc = sb.instantiateViewController(withIdentifier: "rootVC")
+                self.window?.rootViewController = vc
+            }
+        }
         return true
     }
 
